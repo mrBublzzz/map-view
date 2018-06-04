@@ -11,6 +11,7 @@ import AVFoundation
 import AudioToolbox
 import MapKit
 import CoreLocation
+import os.log
 
 class ViewController: UIViewController,CLLocationManagerDelegate {
     @IBAction func slider(_ sender: UISlider) {
@@ -22,8 +23,8 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
     }
     
     var kek = CLLocationManager()
-
-    
+    var placemark1: String = " "
+    var placemark: String = " "
     
     @IBAction func dismiss(_ sender: Any) {
         dismiss(animated: true, completion: nil)
@@ -59,6 +60,9 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
         kek.desiredAccuracy = 0.1
         kek.delegate = self
         kek.startUpdatingLocation()
+        
+       placemark1 += placemark
+        textfield1.text = placemark1
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
@@ -72,10 +76,12 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
      
         print ("\(locations[0].coordinate.latitude) \(locations[0].coordinate.longitude)")
         
-
-        if let placemark = ViewController.getPlacemarkFromLocation(location: locations[0]){
-        print ("\(placemark.subThoroughfare), \(placemark.thoroughfare), \(placemark.locality), \(placemark.postalCode), \(placemark.country)")
-        }
+placemark = ViewController.getPlacemarkFromLocation(location: locations[0])
+       
+        
+//        if let placemark = ViewController.getPlacemarkFromLocation(location: locations[0]){
+//        print ("\(placemark.subThoroughfare), \(placemark.thoroughfare), \(placemark.locality), \(placemark.postalCode), \(placemark.country)")
+//        }
         
 //        textfield1.text = String(format:"%@ %@\n%@ %@ %@\n%@",
 //                                 (placemark?.subThoroughfare)!,
@@ -88,20 +94,32 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
 //        else {print("kekeeelekeke")
 //        }
     }
-    
-    class func getPlacemarkFromLocation(location:CLLocation)->CLPlacemark?{
+     class func getPlacemarkFromLocation(location:CLLocation)->String{
+//    class func getPlacemarkFromLocation(location:CLLocation)->CLPlacemark?{
         let g = CLGeocoder()
         var p:CLPlacemark?
+        var q:String = " "
         g.reverseGeocodeLocation(location, completionHandler: {
             (placemarks, error) in
             let pm = placemarks!
             if (pm.count > 0){
                 p = placemarks![0]
                 print(p)
+                
+                q = String(format:"%@ %@\n%@ %@ %@\n%@",
+                                                 (p?.subThoroughfare)!,
+                                                 (p?.thoroughfare)! ,
+                                                 (p?.locality)!,
+                                                 (p?.postalCode)!,
+                                                 (p?.administrativeArea)!,
+                                                 (p?.country)!)
+                debugPrint("AAAAAAAAAAAAAAAAAA",q)
+           
             }
         })
 
-        return p
+//        return p
+        return q
     }
  
     
