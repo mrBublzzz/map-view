@@ -33,7 +33,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="ты пидор" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="nln-OH-dJP">
-                                <rect key="frame" x="16" y="108" width="343" height="209"/>
+                                <rect key="frame" x="16" y="108" width="343" height="52"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -55,6 +55,13 @@
                                 <rect key="frame" x="65" y="325" width="223" height="2"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </progressView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="88q-li-22c">
+                                <rect key="frame" x="18" y="137" width="330" height="167"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -64,6 +71,7 @@
                         <outlet property="map" destination="Jgg-dF-O1E" id="Elu-Ez-Moc"/>
                         <outlet property="progress" destination="D5q-wD-fYI" id="ymh-hr-kae"/>
                         <outlet property="slider11" destination="wj0-q2-3Wb" id="q4m-Bj-0pK"/>
+                        <outlet property="text" destination="88q-li-22c" id="Ish-H6-gCT"/>
                         <outlet property="textfield1" destination="nln-OH-dJP" id="UlN-w5-F21"/>
                     </connections>
                 </viewController>

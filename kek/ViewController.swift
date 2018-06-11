@@ -11,7 +11,7 @@ import AVFoundation
 import AudioToolbox
 import MapKit
 import CoreLocation
-import os.log
+//import os.log
 
 class ViewController: UIViewController,CLLocationManagerDelegate {
     @IBAction func slider(_ sender: UISlider) {
@@ -35,11 +35,12 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
     @IBOutlet weak var slider11: UISlider!
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var textfield1: UITextView!
+    @IBOutlet weak var text: UITextView!
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-         map.showsUserLocation = true
+//         map.showsUserLocation = true
     }
     
     override func viewDidAppear(_ animated:Bool){
@@ -57,30 +58,35 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
         map.addAnnotation(annotation)
         
         self.kek.requestAlwaysAuthorization()
-        kek.desiredAccuracy = 0.1
-        kek.delegate = self
-        kek.startUpdatingLocation()
+        self.kek.desiredAccuracy = 0.1
+        self.kek.delegate = self
+        self.kek.startUpdatingLocation()
+        self.map.showsUserLocation = true
         
        placemark1 += placemark
         textfield1.text = placemark1
+        text.text = placemark1
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
+//        self.map.showsUserLocation = true
+//        self.kek.startUpdatingLocation()
         let region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude:
             locations[0].coordinate.latitude, longitude:
             locations[0].coordinate.longitude),span:
             MKCoordinateSpanMake(0.002, 0.002))
-        self.map.setRegion(region, animated: true)
-        self.map.showsUserLocation = true
-        self.kek.startUpdatingLocation()
+        self.map.setRegion(region, animated: true) // по идее надо только в первый раз это делать или раз в некоторое время
+//        self.map.showsUserLocation = true
+//        self.kek.startUpdatingLocation()
      
         print ("\(locations[0].coordinate.latitude) \(locations[0].coordinate.longitude)")
         
-placemark = ViewController.getPlacemarkFromLocation(location: locations[0])
-       
-        
-//        if let placemark = ViewController.getPlacemarkFromLocation(location: locations[0]){
-//        print ("\(placemark.subThoroughfare), \(placemark.thoroughfare), \(placemark.locality), \(placemark.postalCode), \(placemark.country)")
+        if let  placemark = ViewController.getPlacemarkFromLocation(location: locations[0]){
+     print ("kekekek \(placemark)")
+        }
+//
+//        if let placemark2 = ViewController.getPlacemarkFromLocation(location: locations[0]){
+//        print ("\(placemark2.subThoroughfare), \(placemark2.thoroughfare), \(placemark2.locality), \(placemark2.postalCode), \(placemark.country)")
 //        }
         
 //        textfield1.text = String(format:"%@ %@\n%@ %@ %@\n%@",
@@ -94,28 +100,32 @@ placemark = ViewController.getPlacemarkFromLocation(location: locations[0])
 //        else {print("kekeeelekeke")
 //        }
     }
-     class func getPlacemarkFromLocation(location:CLLocation)->String{
+     class func getPlacemarkFromLocation(location:CLLocation)->String?{
 //    class func getPlacemarkFromLocation(location:CLLocation)->CLPlacemark?{
         let g = CLGeocoder()
         var p:CLPlacemark?
         var q:String = " "
         g.reverseGeocodeLocation(location, completionHandler: {
             (placemarks, error) in
-            let pm = placemarks!
-            if (pm.count > 0){
-                p = placemarks![0]
+            if let pm = placemarks { //может здесь проверять на нил и если элемент равен нил то заменять на 0000 / здесь !
+                print ("dadada")
+//            if (pm.count > 0){
+                p = pm[0] //был? и placemarks
                 print(p)
-                
+             print ("asdadasd")
                 q = String(format:"%@ %@\n%@ %@ %@\n%@",
-                                                 (p?.subThoroughfare)!,
-                                                 (p?.thoroughfare)! ,
-                                                 (p?.locality)!,
-                                                 (p?.postalCode)!,
-                                                 (p?.administrativeArea)!,
-                                                 (p?.country)!)
-                debugPrint("AAAAAAAAAAAAAAAAAA",q)
-           
+                           (p?.subThoroughfare)!,
+                           (p?.thoroughfare)! ,
+                           (p?.locality)!,
+                           (p?.postalCode)!,
+                           (p?.administrativeArea)!,
+                           (p?.country)!)
+                print("AAAAAAAAAAAAAAAAAA \(q)")
+//                }
+            } else{
+                print(error?.localizedDescription)
             }
+            
         })
 
 //        return p
