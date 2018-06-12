@@ -19,6 +19,7 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
     var placemark1: String = " "
 //    var placemark: String = " "
     var placemark:CLPlacemark?
+    let notification = NotificationCenter()
     
     @IBOutlet weak var map: MKMapView!
     @IBOutlet weak var progress: UIProgressView!
@@ -84,7 +85,9 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
 //            textfield1.text = placemark1
 //            text.text = placemark1
 //        }
-
+print("      wefwefwerfwe \(rabota.perem)")
+        textfield1.text = rabota.perem
+                    text.text = rabota.perem
         if let placemark = ViewController.getPlacemarkFromLocation(location: locations[0]){
         print ("kekekek \(placemark)")
         let q = String(format:"%@ %@\n%@ %@ %@\n%@",
@@ -95,7 +98,7 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
                    (placemark.administrativeArea)!,
                    (placemark.country)!)
         print("BBBBBBBBBBB \(q)")
-//
+
         }
     }
     
@@ -105,13 +108,13 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
         let g = CLGeocoder()
         var p:CLPlacemark?
         var q:String?
-       var a = g.reverseGeocodeLocation(location, completionHandler: { // на выходе из этойфункции ничего нет. хотя должно быть, надо переписать функцию
+        var a = g.reverseGeocodeLocation(location, completionHandler: { // на выходе из этойфункции ничего нет. хотя должно быть, надо переписать функцию
             (placemarks, error) in
             if let pm = placemarks {
-                print ("dadada \(placemarks)")
+//                print ("dadada \(placemarks)")
 //            if (pm.count > 0){
                 p = pm[0] //был? и placemarks
-                print("ETO BYKVA P          \(p)")
+//                print("ETO BYKVA P          \(p)")
                 q = String(format:"%@ %@\n%@ %@ %@\n%@",
                            (p?.subThoroughfare)!,
                            (p?.thoroughfare)! ,
@@ -119,14 +122,15 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
                            (p?.postalCode)!,
                            (p?.administrativeArea)!,
                            (p?.country)!)
-                print("AAAAAAAAAAAAAAAAAA \(q)")
+//                print("AAAAAAAAAAAAAAAAAA \(q)")
+                rabota.perem = q!
             } else{
                 print(error?.localizedDescription)
             }
         })
-        print (a)
-        print("ETO BYKVA Q pered vivodom \(q)")
-        print("eto bukva P pered vivodom \(p)")
+//        print (a)
+//        print("ETO BYKVA Q pered vivodom \(q)")
+//        print("eto bukva P pered vivodom \(p)")
         return p
 //        return q
     }

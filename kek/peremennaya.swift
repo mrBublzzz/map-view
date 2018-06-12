@@ -14,6 +14,7 @@ import CoreLocation
 
 class rabota {
     static var sliderPosit = ""
+    static var perem: String = ""
     
   
     
