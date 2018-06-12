@@ -104,7 +104,7 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
      class func getPlacemarkFromLocation(location:CLLocation)->CLPlacemark?{
         let g = CLGeocoder()
         var p:CLPlacemark?
-        var q:String = " "
+        var q:String?
        var a = g.reverseGeocodeLocation(location, completionHandler: { // на выходе из этойфункции ничего нет. хотя должно быть, надо переписать функцию
             (placemarks, error) in
             if let pm = placemarks {
@@ -126,7 +126,7 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
         })
         print (a)
         print("ETO BYKVA Q pered vivodom \(q)")
-        print("eto bukva P pered  vivodom \(p)")
+        print("eto bukva P pered vivodom \(p)")
         return p
 //        return q
     }
