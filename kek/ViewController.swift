@@ -7,45 +7,34 @@
 //
 
 import UIKit
-import AVFoundation
-import AudioToolbox
+//import AVFoundation
+//import AudioToolbox
 import MapKit
 import CoreLocation
 
-class ViewController: UIViewController,CLLocationManagerDelegate {
-   
-    
+// Главный класс
+class ViewController: UIViewController,CLLocationManagerDelegate, MKMapViewDelegate {
     var kek = CLLocationManager()
-    var placemark1: String = " "
-//    var placemark: String = " "
     var placemark:CLPlacemark?
-    let notification = NotificationCenter()
+
     
     @IBOutlet weak var map: MKMapView!
-    @IBOutlet weak var progress: UIProgressView!
-    @IBOutlet weak var slider11: UISlider!
-    @IBOutlet weak var label: UILabel!
-    @IBOutlet weak var textfield1: UITextView!
     @IBOutlet weak var text: UITextView!
-    @IBAction func dismiss(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
-    }
-    @IBAction func slider(_ sender: UISlider) {
-        //        label.text = String (slider11.value)
-        //        rabota.sliderPosit = rabota.sliderPosit +  String(slider11.value)
-        //        textfield1.text = rabota.sliderPosit
-        //        AudioServicesPlaySystemSound(SystemSoundID(4095))
-                progress.progress = slider11.value
-    }
     
+//    @IBAction func dismiss(_ sender: Any) {
+//        dismiss(animated: true, completion: nil)
+//    }
+   
     
+// какая-то функция
     override func viewDidLoad() {
         super.viewDidLoad()
     }
+
     
+    // Функция появления вью
     override func viewDidAppear(_ animated:Bool){
         super.viewDidAppear(animated)
-       
 //        let location1 = CLLocationCoordinate2DMake (55.805769, 37.725850)
 //        var boy = MKUserLocation()
 //        var userTrackingMode = MKUserTrackingMode(rawValue: 0)
@@ -61,85 +50,65 @@ class ViewController: UIViewController,CLLocationManagerDelegate {
         self.kek.delegate = self
         self.kek.startUpdatingLocation()
         self.map.showsUserLocation = true
-        
-//        placemark1 += placemark
-//        textfield1.text = placemark1
-//        text.text = placemark1
     }
-
+// Функция стандартная, при приходе нового адреса вызывается заново
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]){
         let region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude:
             locations[0].coordinate.latitude, longitude:
             locations[0].coordinate.longitude),span:
             MKCoordinateSpanMake(0.002, 0.002))
         self.map.setRegion(region, animated: true) // по идее надо только в первый раз это делать или раз в некоторое время
-        print ("\(locations[0].coordinate.latitude) \(locations[0].coordinate.longitude)")
-    
+        print("Координаты точки:   \(locations[0].coordinate.latitude) \(locations[0].coordinate.longitude)")
+        print("Правильные текстовые координаты:   \(rabota.perem)")
+        text.text = rabota.perem
+        ViewController.getPlacemarkFromLocation(location: locations[0])
         
+//    добавляем пины
+        let location1 = CLLocationCoordinate2DMake ((locations[0].coordinate.latitude - 0.0002), (locations[0].coordinate.longitude - 0.0002))
+        let annotation1 = MKPointAnnotation()
+        annotation1.coordinate = location1
+        map.addAnnotation(annotation1)
         
-        
-        
-//        if let  placemark = ViewController.getPlacemarkFromLocation(location: locations[0]){
-//     print ("kekekek \(placemark)")
-//            placemark1 = placemark
-//            textfield1.text = placemark1
-//            text.text = placemark1
-//        }
-print("      wefwefwerfwe \(rabota.perem)")
-        textfield1.text = rabota.perem
-                    text.text = rabota.perem
-        if let placemark = ViewController.getPlacemarkFromLocation(location: locations[0]){
-        print ("kekekek \(placemark)")
-        let q = String(format:"%@ %@\n%@ %@ %@\n%@",
-                   (placemark.subThoroughfare)!,
-                   (placemark.thoroughfare)! ,
-                   (placemark.locality)!,
-                   (placemark.postalCode)!,
-                   (placemark.administrativeArea)!,
-                   (placemark.country)!)
-        print("BBBBBBBBBBB \(q)")
-
-        }
+        let location2 = CLLocationCoordinate2DMake ((locations[0].coordinate.latitude + 0.0002), (locations[0].coordinate.longitude + 0.0002))
+        let annotation2 = MKPointAnnotation()
+        annotation2.coordinate = location2
+        map.addAnnotation(annotation2)
+//        let annotation3 = MKPinAnnotationView(
     }
     
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        let annotationview = MKAnnotationView(annotation: annotation, reuseIdentifier: "top")
+        annotationview.image = #imageLiteral(resourceName: "kek11")
+        return annotationview
+    }
     
-//     class func getPlacemarkFromLocation(location:CLLocation)->String?{
-     class func getPlacemarkFromLocation(location:CLLocation)->CLPlacemark?{
+//Функция запроса адреса с выводом в внешнюю переменную (функция ассинхронная и все данные образуются внутри вложенного метода)
+        class func getPlacemarkFromLocation(location:CLLocation){
         let g = CLGeocoder()
         var p:CLPlacemark?
         var q:String?
-        var a = g.reverseGeocodeLocation(location, completionHandler: { // на выходе из этойфункции ничего нет. хотя должно быть, надо переписать функцию
+        g.reverseGeocodeLocation(location, completionHandler: {
             (placemarks, error) in
             if let pm = placemarks {
-//                print ("dadada \(placemarks)")
-//            if (pm.count > 0){
-                p = pm[0] //был? и placemarks
-//                print("ETO BYKVA P          \(p)")
-                q = String(format:"%@ %@\n%@ %@ %@\n%@",
-                           (p?.subThoroughfare)!,
+                p = pm[0]
+                q = String(format:"%@ %@\n%@ %@ %@ %@",
+                           (p?.subThoroughfare ?? "хз"),
                            (p?.thoroughfare)! ,
                            (p?.locality)!,
                            (p?.postalCode)!,
                            (p?.administrativeArea)!,
                            (p?.country)!)
-//                print("AAAAAAAAAAAAAAAAAA \(q)")
                 rabota.perem = q!
-            } else{
-                print(error?.localizedDescription)
-            }
-        })
-//        print (a)
-//        print("ETO BYKVA Q pered vivodom \(q)")
-//        print("eto bukva P pered vivodom \(p)")
-        return p
-//        return q
-    }
+                }else{
+                print(error!.localizedDescription)
+                }
+            })
+        }
  
     
-    
+// Dispose of any resources that can be recreated.
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
 
